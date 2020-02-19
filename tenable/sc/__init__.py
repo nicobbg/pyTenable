@@ -104,6 +104,8 @@ class TenableSC(APISession):
             If a 429 response is returned, how much do we want to backoff
             if the response didn't send a Retry-After header.  The default
             backoff is ``1`` second.
+        base_uri (str, optional):
+            The base uri to access the rest api. Default is set to 'rest'.
         cert (tuple, optional):
             The client-side SSL certificate to use for authentication.  This
             format could be either a tuple or a string pointing to the
@@ -181,14 +183,14 @@ class TenableSC(APISession):
 
     def __init__(self, host, access_key=None, secret_key=None, username=None,
                  password=None, port=443, ssl_verify=False, cert=None,
-                 adapter=None, scheme='https', retries=None, backoff=None,
+                 adapter=None, scheme='https', base_uri='rest', retries=None, backoff=None,
                  ua_identity=None, session=None, proxies=None,
                  vendor=None, product=None, build=None):
         # As we will always be passing a URL to the APISession class, we will
         # want to construct a URL that APISession (and further requests)
         # understands.
         base = '{}://{}:{}'.format(scheme, host, port)
-        url = '{}/rest'.format(base)
+        url = '{}/{}'.format(base, base_uri)
 
         # Setting the SSL Verification flag on the object itself so that it's
         # reusable if the user logs out and logs back in.
